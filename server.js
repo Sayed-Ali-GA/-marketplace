@@ -7,8 +7,10 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const authController = require('./controllers/auth.controller')
+const  listingController = require('./controllers/listing.controller')
 const isSignedIn = require('./middleware/is-signed-in')
 const passUserToView = require('./middleware/pass-user-to-view')
+const path = require('path')
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.MONGODB_URI)
@@ -17,6 +19,7 @@ mongoose.connection.on('connected', () => {
 })
 
 // MIDDLEWARE
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
@@ -30,12 +33,14 @@ app.use(session({
 }))
 app.use(passUserToView)
 
+
 app.get('/', (req, res) => {
     res.render('index.ejs', { title: 'my App'})
 })
 
 // ROUTES
 app.use('/auth', authController)
+app.use('/listings', listingController)
 
 app.get('/vip-lounge', isSignedIn, (req, res) => {
     res.send(`Welcome ✨`)
