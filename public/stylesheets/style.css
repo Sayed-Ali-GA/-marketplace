@@ -2,10 +2,10 @@ body{
     background-color: cornsilk;
 }
 
-form{
+/* form{
     display: flex;
     flex-direction: column;
-}
+} */
 
 .listing-img{
     width: 50vw;
